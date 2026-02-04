@@ -18,7 +18,6 @@ class NaiveBayesModel:
         self.occurrence_table = self.build_occurrence_table(data, labels)
         self.probability_table = self.build_probability_table()
 
-        pass
 
 
     def build_occurrence_table(self, data, labels):
@@ -30,14 +29,14 @@ class NaiveBayesModel:
         for word_list, label in zip(data, labels): 
 
             #iterate through each word in the data point
+            if label not in occurrence_table:
+                occurrence_table[label] = {}
+
             for word in word_list:
-                if word not in occurrence_table:
-                    occurrence_table[word] = {label: 1} #if no word, add with the current label and count 
-                else:
-                    if label not in occurrence_table[word]: #if word but no label, add the label with count 
-                        occurrence_table[word][label] = 1
-                    else: 
-                        occurrence_table[word][label] += 1 #if in both, increment the count
+                if word not in occurrence_table[label]: #if no word in label, add count 1
+                    occurrence_table[label][word] = 1
+                else: 
+                    occurrence_table[label][word] += 1 #if in both, increment the count
 
 
         return occurrence_table
@@ -53,18 +52,17 @@ class NaiveBayesModel:
 
         label_counts = {}
         #Count total words for each label/sentiment
-        for word, labels in self.occurrence_table.items():
-            for label, count in labels.items(): #is a dictionary of labels to counts
-                if label not in label_counts:
-                    label_counts[label] = count
-                else:
-                    label_counts[label] += count
+        for label, word_counts in self.occurrence_table.items():
+            label_counts[label] = 0
+
+            for word, count in word_counts.items(): 
+                label_counts[label] += count  #sum up counts of each word for the label {word, count}
         
         #Calculate probabilities of each word given each label/sentiment
-        for word, labels in self.occurrence_table.items():
-            probability_table[word] = {}
-            for label, count in labels.items():
-                probability_table[word][label] = count / label_counts[label]
+        for label, words in self.occurrence_table.items():
+            probability_table[label] = {}
+            for word, count in words.items():
+                probability_table[label][word] = count / label_counts[label]
 
         return probability_table
                 
@@ -84,8 +82,8 @@ class NaiveBayesModel:
                 #if the word is not in the probability table, we assume its probability is 0 then add the smoothing factor
                 #get funtion returns 0 if word not found and if label not found
                 word_probability = 0
-                if word in self.probability_table:
-                    word_probability = self.probability_table[word].get(label, 0) + a
+                if word in self.probability_table[label].keys():
+                    word_probability = self.probability_table[label].get(word, 0) + a
                 else:
                     word_probability = a
                     
