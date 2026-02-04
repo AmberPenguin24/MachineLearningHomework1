@@ -7,14 +7,14 @@ class NaiveBayesModel:
     def __init__(self) -> None:
         self.occurrence_table = {}
         self.probability_table = {}
-        self.labels = [] #in reality is the sentients/classes
+        self.sentiment = [] #in reality is the sentiment/classes
         
 
     def train_model(self, data, labels):
         '''Runs the training process for the model, building the occurrence table and probability table'''
 
         #TODO - complete this function which runs the entire training process of Naive Bayes
-        self.labels = list(set(labels))  #store unique labels
+        self.sentiment = list(set(labels))  #store unique labels
         self.occurrence_table = self.build_occurrence_table(data, labels)
         self.probability_table = self.build_probability_table()
 
@@ -74,9 +74,9 @@ class NaiveBayesModel:
         # remember that if the model has the same probability of either class, it should pick randomly between the two
         label_probabilities = {}
         a = 1e-16  #smoothing factor to avoid zero probabilities
-        for label in self.labels:
+        for label in self.sentiment:
             probability = 1.0
-            prob_label = 1.0 / len(self.labels) #the prior prob of getting each label P(Label)
+            prob_label = 1.0 / len(self.sentiment) #the prior prob of getting each label P(Label)
 
             for word in variables:
                 #if the word is not in the probability table, we assume its probability is 0 then add the smoothing factor
