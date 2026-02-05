@@ -76,7 +76,7 @@ class NaiveBayesModel:
                 
 
     def predict(self, data):
-        '''Takes a set of data points, and predicts the class they should belong to'''
+        '''Takes a set of data/variables list, and predicts the class they should belong to'''
 
         predictions = []
 
