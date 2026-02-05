@@ -26,6 +26,8 @@ class NaiveBayesModel:
         #TODO - complete this function which creates a nested dictionary table of frequencies based on the training data.
         occurrence_table = {}    
         #iterate through each data point and its corresponding label
+        data = data.to_list()
+        labels = labels.to_list()
         for word_list, label in zip(data, labels): 
 
             #iterate through each word in the data point
@@ -38,12 +40,16 @@ class NaiveBayesModel:
                 else: 
                     occurrence_table[word][label] += 1 #if in both, increment the count
 
-        
+        self.occurrence_table = {k2: {k1: v for k1, d in self.occurrence_table.items() for kk, v in d.items() if kk == k2}
+           for k2 in {k for d in self.occurrence_table.values() for k in d}}
+
         return occurrence_table
         
 
     def build_probability_table(self):
         '''Private function to create the probability table based on the occurrence table'''
+        self.occurrence_table = {k2: {k1: v for k1, d in self.occurrence_table.items() for kk, v in d.items() if kk == k2}
+           for k2 in {k for d in self.occurrence_table.values() for k in d}}
 
         #this funtion builds the probabilities of each word given each label/sentiment
         #NOTE: this is P(word|Ck) where Ck is the class/label/sentiment idk why sentiment is not just sentiment and is label >:(
@@ -69,6 +75,8 @@ class NaiveBayesModel:
                 if label not in probability_table[word].keys():
                     probability_table[word][label] = count / label_counts[label] 
 
+        self.occurrence_table = {k2: {k1: v for k1, d in self.occurrence_table.items() for kk, v in d.items() if kk == k2}
+           for k2 in {k for d in self.occurrence_table.values() for k in d}}
 
         return probability_table
                 
