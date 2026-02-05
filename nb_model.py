@@ -82,6 +82,7 @@ class NaiveBayesModel:
                 #if the word is not in the probability table, we assume its probability is 0 then add the smoothing factor
                 #get funtion returns 0 if word not found and if label not found
                 word_probability = 0
+
                 if word in self.probability_table[label].keys():
                     word_probability = self.probability_table[label].get(word, 0) + a
                 else:
