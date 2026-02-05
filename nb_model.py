@@ -73,7 +73,7 @@ class NaiveBayesModel:
         #TODO - implement prediction using the Naive Bayes method
         # remember that if the model has the same probability of either class, it should pick randomly between the two
         label_probabilities = {}
-        a = 1e-16  #smoothing factor to avoid zero probabilities
+        a = 1e-16  #smoothing factor to avoid zero probabilities 
         for label in self.sentiment:
             probability = 1.0
             prob_label = 1.0 / len(self.sentiment) #the prior prob of getting each label P(Label)
