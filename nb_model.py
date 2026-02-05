@@ -40,16 +40,12 @@ class NaiveBayesModel:
                 else: 
                     occurrence_table[word][label] += 1 #if in both, increment the count
 
-        self.occurrence_table = {k2: {k1: v for k1, d in self.occurrence_table.items() for kk, v in d.items() if kk == k2}
-           for k2 in {k for d in self.occurrence_table.values() for k in d}}
-
+        
         return occurrence_table
         
 
     def build_probability_table(self):
         '''Private function to create the probability table based on the occurrence table'''
-        self.occurrence_table = {k2: {k1: v for k1, d in self.occurrence_table.items() for kk, v in d.items() if kk == k2}
-           for k2 in {k for d in self.occurrence_table.values() for k in d}}
 
         #this funtion builds the probabilities of each word given each label/sentiment
         #NOTE: this is P(word|Ck) where Ck is the class/label/sentiment idk why sentiment is not just sentiment and is label >:(
@@ -75,13 +71,22 @@ class NaiveBayesModel:
                 if label not in probability_table[word].keys():
                     probability_table[word][label] = count / label_counts[label] 
 
-        self.occurrence_table = {k2: {k1: v for k1, d in self.occurrence_table.items() for kk, v in d.items() if kk == k2}
-           for k2 in {k for d in self.occurrence_table.values() for k in d}}
 
         return probability_table
                 
 
-    def predict(self, variables):
+    def predict(self, data):
+        '''Takes a set of data points, and predicts the class they should belong to'''
+
+        predictions = []
+
+        for variables in data:
+            prediction = self.predict_single_tweet(variables)
+            predictions.append(prediction)
+
+        return predictions
+
+    def predict_single_tweet(self, variables):
         '''Takes a set of variables, and predicts the class they should belong to'''
 
         #TODO - implement prediction using the Naive Bayes method
