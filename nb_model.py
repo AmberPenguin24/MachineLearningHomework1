@@ -75,13 +75,13 @@ class NaiveBayesModel:
         return probability_table
                 
 
-    def predict(self, data):
+    def predict(self, variables):
         '''Takes a set of data/variables list, and predicts the class they should belong to'''
 
         predictions = []
 
-        for variables in data:
-            prediction = self.predict_single_tweet(variables)
+        for variable in variables:
+            prediction = self.predict_single_tweet(variable)
             predictions.append(prediction)
 
         return predictions
